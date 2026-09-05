@@ -1,15 +1,17 @@
 {
   "name": "phase2-qdrant-rag",
   "version": "1.0.0",
-  "description": "Phase 2 RAG API — Fastify + TypeScript boilerplate (no RAG logic yet)",
+  "description": "Production RAG API with Fastify, TypeScript, Qdrant vector database, and Gemini embeddings",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "qdrant:smoke": "tsx src/scripts/qdrant-smoke.ts"
   },
   "dependencies": {
+    "@qdrant/js-client-rest": "^1.16.2",
     "@fastify/cors": "^10.0.2",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",

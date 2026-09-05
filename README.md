@@ -1,29 +1,84 @@
 # phase2-qdrant-rag
 
-Fastify + TypeScript boilerplate for the Phase 2 RAG demo. **No ingest/query logic yet.**
-
-## Layout
+Ask-my-docs API: Fastify + TypeScript, local Qdrant, Gemini embeddings + generation.
 
 ```text
-src/
-  server.ts              listen + SIGTERM / SIGINT + process error handlers
-  app.ts                 build Fastify, register plugins and routes
-  config/env.ts          Zod-validated env
-  plugins/               cors, central error handler
-  routes/health.routes.ts
-  lib/errors.ts          AppError for 4xx
+docs on disk
+  -> chunk
+  -> embed
+  -> upsert Qdrant
+question
+  -> embed
+  -> search top-k
+  -> LLM (chunks only)
+  -> { answer, citations }
 ```
 
-Same runtime family as `phase1-gemini-api`: ESM, Fastify 5, Zod, `tsx`. No extra linters, test runners, or Gemini/Qdrant packages until those tasks.
+## Constants
 
-## Run
+| Name | Value |
+|---|---|
+| `CHUNK_SIZE` | 1000 characters |
+| `CHUNK_OVERLAP` | 200 characters |
+| `TOP_K` | 5 |
+| Embedding model | `gemini-embedding-001` |
+| Vector size | 3072 |
+| Distance | Cosine |
+| Generation model | `gemini-3.7-flash` (`GEMINI_MODEL`) |
+
+Re-ingest is safe: point ids are SHA-256 of `source` + `chunkIndex`. Deleted files can leave old points until you recreate the collection.
+
+## 1. Qdrant
+
+From this folder:
+
+```bash
+docker-compose up -d
+```
+
+HTTP: `http://localhost:6333`. Dashboard: `http://localhost:6333/dashboard`.
+
+Optional smoke test (creates collection `docs` if missing):
+
+```bash
+npm run qdrant:smoke
+```
+
+## 2. App env
 
 ```bash
 cp .env.example .env
+```
+
+Set `GEMINI_API_KEY` in `.env`. Never commit `.env`.
+
+```bash
 npm install
 npm run dev
 ```
 
 `GET http://localhost:3000/health` → `{ "status": "ok" }`.
+
+## 3. Ingest
+
+Reads `docs/*.md` and `docs/*.txt` only.
+
+```bash
+curl --location --request POST 'http://localhost:3000/ingest' \
+  --header 'Content-Type: application/json' \
+  --data '{}'
+```
+
+## 4. Query
+
+```bash
+curl --location 'http://localhost:3000/query' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "question": "What is RAG in this project?"
+  }'
+```
+
+The model must answer only from retrieved chunks. If the docs do not contain it, it should say it does not know and not invent citations.
 
 `npm run typecheck` and `npm run build` / `npm start` for compiled `dist/`.
