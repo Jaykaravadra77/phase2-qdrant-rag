@@ -1,0 +1,254 @@
+AI ENGINEERING ROADMAP
+A 14-Week Path from Backend Developer to AI Engineer
+
+Prepared for Jay Karavadra
+Software Developer · 4+ yrs Node.js/GraphQL backend · AWS Certified Developer
+August 2026
+
+Built from the current standard AI-engineering curriculum:
+Anthropic Academy · DeepLearning.AI · roadmap.sh · Codebasics AI Engineering Bootcamp curriculum
+
+
+CONTENTS
+
+- Why This Is the Right Move
+- How to Use This Roadmap
+- Timeline at a Glance
+- Phase 1: AI & LLM Foundations (Weeks 1-2)
+- Phase 2: Vector Databases & Retrieval-Augmented Generation (RAG) (Weeks 3-4)
+- Phase 3: Agents & Tool Use (Weeks 5-6)
+- Phase 4: Evaluation, Observability & Guardrails (Weeks 7-8)
+- Phase 5: Production Deployment on AWS (Weeks 9-10)
+- Phase 6: Fine-Tuning & Model Optimization (Weeks 11-12)
+- Phase 7: Capstone Project & Interview Preparation (Weeks 13-14)
+- Certifications Worth Pursuing
+- Portfolio at the End of 14 Weeks
+- Sources
+
+
+WHY THIS IS THE RIGHT MOVE
+
+AI engineering, as practiced in industry, is applied software engineering: building products on top of existing large language models — RAG pipelines, agents, tool-using systems — rather than training models from scratch. That is a very different (and shorter) path than becoming an ML researcher, and it plays directly to your existing strengths.
+
+You already have the hard part: production Node.js microservices, GraphQL federation, Redis/BullMQ queues, real-time systems (WebSockets, Socket.IO), payment and webhook integrations, and containerized deployment on AWS EKS. The AI-specific layer — prompting, embeddings, vector search, agent orchestration, evals — sits on top of that foundation and is comparatively fast to acquire when you already think in APIs, queues, and services.
+
+This roadmap is not a generic "learn AI" course list. It follows the structure used by current, industry-facing AI engineering curricula (see Sources), reordered and time-boxed for someone with your background — light on generic programming fundamentals, heavy on RAG, agents, evals, and production deployment, and deliberately routed through AWS Bedrock and MCP/Claude Agent SDK so your existing AWS certification and Node.js skills compound instead of getting set aside for Python from scratch.
+
+
+HOW TO USE THIS ROADMAP
+
+This mirrors the format used by structured AI-engineering programs (Codebasics' AI Engineering Bootcamp for software engineers, DeepLearning.AI's short-course sequence, and Anthropic Academy's developer track): short theory input, immediately followed by a hands-on build, then a checkpoint. Each phase below follows the same four-step learning loop:
+
+1. Learn the concept — read/watch the specific course module linked (1-3 hrs). Don't binge multiple sources on the same topic; one good source per concept is enough.
+2. Build immediately — implement the concept in a small script or endpoint the same day. AI engineering concepts (chunking, reranking, tool-calling) don't stick from reading alone.
+3. Explain it back — write a short note (README or LinkedIn post) explaining what you built and why, in plain language. If you can't explain the retrieval strategy simply, you don't understand it yet — this is the Feynman technique, and it's also free portfolio content.
+4. Ship the phase project — each phase ends in a project milestone, not a quiz. By the end of Phase 7 you have 6-8 deployed, demoable projects — the actual thing that gets you hired, per every source below.
+
+Pace: 8-10 hrs/week alongside full-time work → 14 weeks. If you can dedicate weekends fully, most engineers with your experience level compress this to 9-10 weeks (this is the exact pace the Codebasics bootcamp targets for working software engineers).
+
+
+Python or stay in TypeScript?
+
+Both — deliberately staggered. The AI engineering ecosystem (Hugging Face, DeepLearning.AI courses, fine-tuning tooling, most tutorials and papers) is Python-first, so you need reading/scripting fluency in it. But your production instincts are in Node/TypeScript, and that's now a legitimate first-class AI engineering stack — the AI SDK by Vercel and LangChain.js/LangGraph.js are production-grade and TypeScript-native.
+
+- Weeks 1-2: Python fundamentals (you already know programming — this is syntax, not concepts) + follow all foundational courses in Python, since that's how they're taught.
+- Weeks 3+: prototype and learn new concepts in Python (matches the courses), then re-implement your phase projects in Node.js/TypeScript using the AI SDK / LangChain.js / MCP TypeScript SDK — this is what actually goes on your resume, since it sits directly on your existing backend stack.
+
+
+TIMELINE AT A GLANCE
+
+Phase      Duration      Focus                                                              Track
+---------  ------------  -----------------------------------------------------------------  -----------
+Phase 1    Weeks 1-2     LLM & AI Foundations — how LLMs work, prompt engineering,          Foundations
+                         embeddings
+Phase 2    Weeks 3-4     Vector Databases & RAG — retrieval pipelines over real data        Core Skill
+Phase 3    Weeks 5-6     Agents & Tool Use — ReAct, LangGraph, Claude Agent SDK, MCP        Core Skill
+Phase 4    Weeks 7-8     Evaluation & Observability — LangSmith, RAGAS, guardrails,         Production
+                         cost control
+Phase 5    Weeks 9-10    Deployment on AWS — Bedrock, Lambda, EKS (builds on your AWS       Production
+                         cert)
+Phase 6    Weeks 11-12   Fine-Tuning & Model Optimization — LoRA/QLoRA, quantization,       Advanced
+                         local models
+Phase 7    Weeks 13-14   Capstone Project & Interview Prep — portfolio, resume,             Capstone
+                         system design
+
+
+PHASE 1: AI & LLM FOUNDATIONS
+Weeks 1-2 · Close the gap between backend engineering and AI engineering: how LLMs actually work, and how to talk to them reliably.
+
+What you'll learn
+- The 2026 AI landscape and where AI engineers sit relative to ML researchers/data scientists
+- Transformer architecture, tokenization, and context windows — enough to reason about cost, latency, and truncation, not to implement one
+- Prompt engineering: system/user/assistant roles, few-shot examples, structured output (JSON mode/tool schemas), chain-of-thought
+- Embeddings: how text becomes vectors, and what "semantic similarity" actually measures
+- The Anthropic Messages API end-to-end: streaming, system prompts, multi-turn context, vision input, prompt caching
+- Python refresher: venv/uv, requests/httpx, FastAPI basics (mirrors your Express/Fastify instincts)
+
+Standard courses / resources
+- Anthropic Academy — Building with the Claude API (free, 7 modules — API fundamentals through agentic workflows)
+- Anthropic docs — Prompt engineering guide
+- DeepLearning.AI — How Transformer LLMs Work
+- DeepLearning.AI — ChatGPT Prompt Engineering for Developers
+- roadmap.sh — AI Engineer roadmap (use as a topic checklist)
+
+Project milestone
+A CLI or small API endpoint (Node/Fastify, since it's your stack) that calls the Claude API with a structured system prompt and returns validated JSON — e.g. "summarize this GitHub issue into title/severity/tags." This is the "hello world" every subsequent phase builds on.
+
+
+PHASE 2: VECTOR DATABASES & RETRIEVAL-AUGMENTED GENERATION (RAG)
+Weeks 3-4 · RAG is the backbone of most production AI applications — it's how you make an LLM reason over your own data instead of just its training knowledge.
+
+What you'll learn
+- Keyword search (TF-IDF/BM25) vs. semantic search vs. hybrid search
+- Vector databases: Qdrant, Pinecone, and pgvector (pgvector is the natural fit — you already run Postgres-adjacent Mongo/MySQL infra)
+- Chunking strategies, document ingestion, and query parsing
+- Approximate Nearest Neighbor (ANN) search, cross-encoders, and reranking
+- The RAG-vs-fine-tuning tradeoff, and agentic RAG (letting the model decide when/what to retrieve)
+
+Standard courses / resources
+- DeepLearning.AI — Retrieval Augmented Generation (RAG) — 5-module course with Weaviate, capstone chatbot
+- DeepLearning.AI — Building and Evaluating Advanced RAG
+- Anthropic docs — Contextual retrieval / building RAG with Claude
+- Vendor docs — Qdrant quickstart
+
+Stack note for you
+Build the ingestion/query API in Node.js + Fastify with pgvector or Qdrant's Node client — this is a direct extension of the 379-endpoint Fastify backend you already shipped for ClubMatch.
+
+Project milestone
+"Ask my own docs" API: ingest a real document set (your own project READMEs, or public API docs) into a vector store, expose a /query endpoint that retrieves + cites sources, and measure retrieval quality manually before moving to automated evals in Phase 4.
+
+
+PHASE 3: AGENTS & TOOL USE
+Weeks 5-6 · The most in-demand AI engineering skill right now: systems that plan, call tools, and act — not just answer a single prompt.
+
+What you'll learn
+- Agent anatomy: the ReAct loop (reason → act → observe), tool binding, and structured tool schemas
+- Building agents with LangChain / LangGraph (state machines, memory, human-in-the-loop)
+- The Claude Agent SDK and Model Context Protocol (MCP) — the newest paradigm for connecting agents to external tools/systems, and directly relevant since you'll be building MCP servers on top of Node backends
+- Multi-agent systems and subgraph orchestration
+- Guardrails, semantic routing, and basic safety/compliance considerations for production agents
+
+Standard courses / resources
+- DeepLearning.AI — Functions, Tools and Agents with LangChain
+- DeepLearning.AI — AI Agents in LangGraph
+- Anthropic docs — Building agents with the Claude Agent SDK
+- Anthropic docs — Model Context Protocol (MCP) introduction
+- roadmap.sh — AI Agents roadmap
+
+Stack note for you
+Use the MCP TypeScript SDK to wrap one of your existing Node services (e.g. a read-only slice of a ClubMatch-style API) as an MCP server, then drive it from an agent. This is a genuinely differentiated portfolio piece — most bootcamp grads only do this in Python.
+
+Project milestone
+A tool-using agent (e.g. a "repo assistant" that reads GitHub issues, queries your Phase 2 RAG API, and drafts responses) plus one MCP server exposing a real backend capability of yours as an agent tool.
+
+
+PHASE 4: EVALUATION, OBSERVABILITY & GUARDRAILS
+Weeks 7-8 · "It works on my laptop" isn't a product. This is the phase that separates hobby projects from something you can defend in an interview.
+
+What you'll learn
+- Evaluation frameworks: RAGAS for retrieval/answer quality, custom eval harnesses for agent tasks
+- Tracing and observability: LangSmith (runs, traces, cost tracking) — the direct analogue of the OpenTelemetry tracing you already use
+- Cost optimization: prompt caching, response caching, batching, rate limiting
+- Hallucination detection and mitigation strategies
+- Logging and monitoring patterns for non-deterministic systems (this is genuinely new — unlike a REST endpoint, the same input can produce different outputs)
+
+Standard courses / resources
+- Tool docs — LangSmith observability guide
+- Tool docs — RAGAS evaluation framework
+- Anthropic docs — Reducing hallucinations
+
+Project milestone
+Add an eval suite (RAGAS or a custom golden-dataset script) to your Phase 2 RAG API and instrument your Phase 3 agent with LangSmith tracing. Produce a short report: retrieval precision/recall, average cost per query, p95 latency.
+
+
+PHASE 5: PRODUCTION DEPLOYMENT ON AWS
+Weeks 9-10 · This is where your AWS certification stops being adjacent and starts being direct leverage — most AI engineering candidates have to learn cloud deployment from zero. You don't.
+
+What you'll learn
+- AWS Bedrock: managed access to Claude and other foundation models, provisioned throughput, guardrails
+- Serverless inference patterns: API Gateway + Lambda for lightweight agent endpoints
+- Running RAG/agent workloads on your existing EKS familiarity — sidecar patterns, autoscaling for bursty AI workloads
+- SageMaker JumpStart for open-source model hosting (contrast with Bedrock's managed models)
+- Secrets/IAM patterns specific to LLM API keys and per-tenant rate limiting
+
+Standard courses / resources
+- AWS docs — Amazon Bedrock — getting started
+- AWS training — AWS Certified AI Practitioner (natural next cert given your existing AWS Developer Associate)
+- AWS training — AWS Certified Machine Learning Engineer – Associate
+
+Project milestone
+Deploy your Phase 3 agent + Phase 2 RAG API behind API Gateway/Lambda (or on your existing EKS pattern) using Bedrock as the model provider. Add CloudWatch dashboards for cost and latency — the same operational discipline you already apply to CricTracker/ClubMatch.
+
+
+PHASE 6: FINE-TUNING & MODEL OPTIMIZATION
+Weeks 11-12 · Advanced, and optional if your target roles are pure application-layer AI engineering — but it's what separates mid-level from senior, and it's a strong differentiator on a resume.
+
+What you'll learn
+- When to fine-tune vs. when RAG/better prompting is enough (usually the latter — know the tradeoff cold, since it's a common interview question)
+- Parameter-efficient fine-tuning: LoRA and QLoRA
+- Quantization basics and running models locally with Ollama (no API cost, full control — useful for demos and cost-sensitive prototyping)
+- Model routing and multi-model strategies (cheap model for classification, strong model for reasoning)
+
+Standard courses / resources
+- DeepLearning.AI — Finetuning Large Language Models
+- Hugging Face — PEFT (LoRA/QLoRA) documentation
+- Tool docs — Ollama — run models locally
+
+Project milestone
+Fine-tune a small open model (LoRA) on a narrow task pulled from your own domain — e.g. classifying support tickets or PCB-rule violations from the Azitech-style data you already understand — and compare it against a prompted baseline on cost and accuracy.
+
+
+PHASE 7: CAPSTONE PROJECT & INTERVIEW PREPARATION
+Weeks 13-14 · Technical skill alone doesn't get you hired — proof and communication do.
+
+What you'll learn
+- Combine Phases 1-5 into one deployed, end-to-end AI product (RAG + agent + MCP tool + AWS deployment + observability)
+- Structured project storytelling: problem → architecture → tradeoffs → results (the same "Environment:" + bullet structure you already use on your resume)
+- AI system design interview patterns: how would you design a RAG system at scale, how do you control cost, how do you evaluate an agent
+- Resume and LinkedIn positioning: leading with your backend depth, AI layer as the differentiator, not the other way around
+
+Standard courses / resources
+- roadmap.sh — AI Engineer projects list (for extra project ideas)
+- Anthropic Academy — Full course catalog — pick up any remaining MCP/Agent Skills/Claude Code courses for LinkedIn-addable certificates
+
+Project milestone
+Capstone: a single polished, publicly demoable project (e.g. a support/onboarding agent for a SaaS-style product, mirroring ClubMatch's domain) with a README that documents architecture, evals, and cost — this becomes the centerpiece of your resume and interview conversation.
+
+
+CERTIFICATIONS WORTH PURSUING
+
+- AWS Certified AI Practitioner — foundational, fast to get, and a natural pairing with your existing AWS Certified Developer credential.
+- AWS Certified Machine Learning Engineer – Associate — more technical, worth targeting after Phase 5.
+- Anthropic Academy certificates — free, Skilljar-issued, LinkedIn-addable; cover API fundamentals through MCP and Agent Skills.
+- DeepLearning.AI course certificates — each short course issues one; low effort, and the course names themselves are recognizable to technical recruiters.
+
+
+PORTFOLIO AT THE END OF 14 WEEKS
+
+Six deployed, demoable projects — the actual signal that gets interviews, per every roadmap researched for this plan:
+
+- Structured-output API wrapping the Claude API (Phase 1)
+- "Ask my own docs" RAG API with citations (Phase 2)
+- Tool-using agent + one MCP server exposing a real backend capability (Phase 3)
+- The same RAG/agent system with evals (RAGAS) and tracing (LangSmith) added (Phase 4)
+- That system deployed on AWS Bedrock/Lambda or EKS with cost/latency dashboards (Phase 5)
+- A fine-tuned small model with a documented cost/accuracy comparison (Phase 6)
+- A polished capstone product tying all of the above together, with a public writeup (Phase 7)
+
+
+SOURCES
+
+This roadmap's structure and phase ordering were synthesized from the following current (2026) references:
+
+- Codebasics — Software Engineer to AI Engineer Roadmap (2026 Guide)
+- roadmap.sh — AI Engineer roadmap
+- roadmap.sh — AI Agents roadmap
+- DeepLearning.AI — course catalog
+- Anthropic Academy — Building with the Claude API
+- Anthropic — Model Context Protocol introduction
+- Anthropic — Claude Agent SDK overview
+- AI SDK by Vercel — documentation
+- AWS — Amazon Bedrock user guide
+- AWS — Certified AI Practitioner
+- Dataquest — How to Become an AI Engineer in 2026
+- Scrimba — How to Become an AI Engineer: 2026 Developer Roadmap
